@@ -48,7 +48,7 @@
 	<!-- 微信项目 共同依赖 -->
 	<dependencies>
 		<dependency>
-			<!-- dubbo 依赖jar�?-->
+			<!-- dubbo 依赖jar包-->
 			<groupId>com.alibaba</groupId>
 			<artifactId>dubbo</artifactId>
 			<version>2.5.3</version>
@@ -80,7 +80,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<!-- dubbo 连接 zookeeper 客户�?-->
+			<!-- dubbo 连接 zookeeper 客户端?-->
 			<groupId>com.github.sgroschupf</groupId>
 			<artifactId>zkclient</artifactId>
 			<version>0.1</version>
@@ -94,16 +94,19 @@
 		</dependency>
 	</dependencies>
 
-	<!-- 微信项目 �?��maven模块 -->
+	<!-- 微信项目 maven模块 -->
 	<modules>
 		<module>businessCore</module>		<!-- 微信项目 ·业务逻辑实现 -->
 		<module>business-interface</module>	<!-- 微信项目 ·业务逻辑接口api -->
 		<module>business-model</module>		<!-- 微信项目 ·业务逻辑bean -->
 		<module>manage</module>				<!-- 微信项目 ·后台管理 -->
 		<module>passport</module>			<!-- 微信项目 ·单点登录 -->
-		<module>wechatCore</module>			<!-- 微信项目 ·微信api实现�?-->
+		<module>wechatCore</module>			<!-- 微信项目 ·微信api实现project-->
 		<module>wechat-interface</module>	<!-- 微信项目 ·微信接口api -->
 		<module>wechat-model</module>		<!-- 微信项目 ·微信操作bean -->
-    <module>webapp</module>
-  </modules>
+	    <module>webapp</module>				<!-- 微信项目 ·微信前端项目 -->
+	    <module>common-util</module>		<!-- 微信项目 ·微信共有工具类 -->
+	    <module>common-log</module>			<!-- 微信项目 ·日志输出格式封装 -->
+	    <module>common-exception</module>
+	</modules>
 </project>
