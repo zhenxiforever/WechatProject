@@ -69,6 +69,6 @@
 	    <module>webapp</module>				<!-- 微信项目 ·微信前端项目 -->
 	    <module>common-util</module>		<!-- 微信项目 ·微信共有工具类 -->
 	    <module>common-log</module>			<!-- 微信项目 ·日志输出格式封装 -->
-	    <module>common-exception</module>
+	    <module>common-exception</module>   <!-- 微信项目 ·平台异常封装 -->
 	</modules>
 </project>
