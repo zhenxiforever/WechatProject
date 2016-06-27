@@ -3,7 +3,7 @@ package com.bilibala.wechat.model.pojo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserOpenid {
+public class WechatUserOpenid {
 	private String next_openid;
 	
 	private List<String> openid_list=new ArrayList<String>();

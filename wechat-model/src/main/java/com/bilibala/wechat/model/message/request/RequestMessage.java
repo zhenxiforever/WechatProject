@@ -6,6 +6,7 @@ import org.dom4j.Document;
 import org.dom4j.Node;
 
 import com.bilibala.wechat.model.message.Message;
+import com.bilibala.wechat.model.pojo.WechatUser;
 
 
 /**
@@ -21,7 +22,7 @@ public abstract class RequestMessage extends Message {
 	private static Log log = LogFactory.getLog(RequestMessage.class);
 
 	private static final long USERINFO_UPDATE_TIME = 7 * 24 * 60 * 60 * 1000L;
-//	protected WxUserInfo currentUserInfo;
+	protected WechatUser currentUserInfo;
 	protected String localAddr;
 	
 	/**
@@ -96,9 +97,9 @@ public abstract class RequestMessage extends Message {
 	 * 
 	 * @return
 	 */
-//	public WxUserInfo getCurrentUserInfo() {
-//		return this.currentUserInfo;
-//	}
+	public WechatUser getCurrentUserInfo() {
+		return this.currentUserInfo;
+	}
 
 	/**
 	 * 获取属性：请求的地址(IP)

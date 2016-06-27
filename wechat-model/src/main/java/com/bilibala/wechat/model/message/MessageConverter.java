@@ -1,6 +1,6 @@
 package com.bilibala.wechat.model.message;
 
-import org.apache.log4j.Logger;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -13,7 +13,6 @@ import com.bilibala.wechat.model.message.request.impl.LinkRequestMessage;
 import com.bilibala.wechat.model.message.request.impl.LocationEventRequestMessage;
 import com.bilibala.wechat.model.message.request.impl.LocationRequestMessage;
 import com.bilibala.wechat.model.message.request.impl.ScanEventRequestMessage;
-import com.bilibala.wechat.model.message.request.impl.SpringDoctorRequestMessage;
 import com.bilibala.wechat.model.message.request.impl.SubscribeEventRequestMessage;
 import com.bilibala.wechat.model.message.request.impl.TextRequestMessage;
 import com.bilibala.wechat.model.message.request.impl.VideoRequestMessage;
@@ -23,14 +22,12 @@ import com.bilibala.wechat.model.message.request.impl.VoiceRequestMessage;
 /**
  * 微信服务器发送的XML到对象的转化
  * 
- * @author 
- * @createTime 
- * @history 1.修改时间,修改;修改内容：
- * 
+ * @project wechat-model
+ * @author smile
+ * @createDate 2016年6月27日
  */
 public class MessageConverter {
 	
-	private static Logger logger = Logger.getLogger(MessageConverter.class);
 	
 	/**
 	 * 将xml转换为请求消息对象
@@ -83,7 +80,6 @@ public class MessageConverter {
 			}
 		} catch (DocumentException e) {
 			e.printStackTrace();
-			logger.error("parse error\n"+xml);
 		}
 
 		return returnRequestMessage;

@@ -1,5 +1,7 @@
 package com.bilibala.wechat.model.pojo;
 
+import java.util.Map;
+
 /**
  * 微信返回请求接口情况结果类
  * 
@@ -11,6 +13,7 @@ public class ResultMsgFromWechat {
 	private String errCode;
 	private String errMsg;
 	private boolean isResSuccess;
+	private Map<String,Object> resultObj;
 	
 	public ResultMsgFromWechat(){
 	}
@@ -18,6 +21,10 @@ public class ResultMsgFromWechat {
 	public ResultMsgFromWechat(String errCode,String errMsg){
 		this.errCode = errCode;
 		this.errMsg = errMsg;
+	}
+	
+	public ResultMsgFromWechat(boolean isResSuccess){
+		this.isResSuccess = isResSuccess;
 	}
 	
 	public String getErrCode() {
@@ -40,4 +47,13 @@ public class ResultMsgFromWechat {
 	public void setResSuccess(boolean isResSuccess) {
 		this.isResSuccess = isResSuccess;
 	}
+
+	public Map<String, Object> getResultObj() {
+		return resultObj;
+	}
+
+	public void setResultObj(Map<String, Object> resultObj) {
+		this.resultObj = resultObj;
+	}
+	
 }

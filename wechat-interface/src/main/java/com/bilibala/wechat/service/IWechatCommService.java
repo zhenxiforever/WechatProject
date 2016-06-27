@@ -6,7 +6,7 @@ import com.bilibala.exception.WechatException;
 import com.bilibala.wechat.model.pojo.NewsItem;
 import com.bilibala.wechat.model.pojo.ResultMsgFromWechat;
 import com.bilibala.wechat.model.pojo.TradeResultFromWechat;
-import com.bilibala.wechat.model.pojo.UserOpenid;
+import com.bilibala.wechat.model.pojo.WechatUserOpenid;
 import com.bilibala.wechat.model.pojo.WechatMenu;
 import com.bilibala.wechat.model.pojo.WechatUser;
 
@@ -40,7 +40,7 @@ public interface IWechatCommService {
 	 * @date 2016年6月19日
 	 * @return
 	 */
-	public ResultMsgFromWechat createWXGroup(String accountId, String group_name) throws WechatException;
+	public int createWXGroup(String accountId, String group_name) throws WechatException;
 	 
 	/**
 	 * 更新微信分组信息
@@ -121,7 +121,7 @@ public interface IWechatCommService {
 	 * @return UserOpenid
 	 * @throws WechatException 
 	 */
-	public UserOpenid getWXUserOpenId(String accountId,String next_openid) throws WechatException;
+	public WechatUserOpenid getWXUserOpenId(String accountId,String next_openid) throws WechatException;
 	 
 	/**
 	 * 发送模版推送信息 

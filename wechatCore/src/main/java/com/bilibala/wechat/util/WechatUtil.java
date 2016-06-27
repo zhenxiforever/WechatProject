@@ -7,10 +7,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.bilibala.common.util.PropsUtil;
+
+import com.bilibala.common.util.SSLNetProvider;
 import com.bilibala.exception.WechatException;
 import com.bilibala.wechat.model.pojo.NewsItem;
 import com.bilibala.wechat.model.pojo.WechatAccount;
 import com.bilibala.wechat.model.pojo.WechatGroup;
+import com.bilibala.wechat.model.pojo.WechatMenu;
+import com.bilibala.wechat.model.pojo.WechatUser;
+import com.bilibala.wechat.model.pojo.WechatUserOpenid;
+import com.bilibala.wechat.model.pojo.TradeResultFromWechat;
 
 /**
  * 调用 微信服务接口 工具类
@@ -45,7 +52,7 @@ public class WechatUtil {
 	 * 开发者需要进行妥善保存。access_token的存储至少要保留512个字符空间。
 	 * access_token的有效期目前为2个小时，需定时刷新，重复获取将导致上次获取的access_token失效。
 	 * 
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
 	public void getClient_credential() throws WechatException, JSONException {
@@ -57,7 +64,7 @@ public class WechatUtil {
 		if (JsonUtil.isRetSuccess(json)) {
 			access_token = json.optString("access_token");
 		} else {
-			throw new WeixinException("[errcode:" + json.optString("errcode")
+			throw new WechatException("[errcode:" + json.optString("errcode")
 					+ "]:" + json.optString("errmsg"));
 		}
 	}
@@ -82,15 +89,15 @@ public class WechatUtil {
 	 * 
 	 * @param open_id
 	 * @return
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
-	public User getWXUserInfo(String openId) throws WeixinException,
+	public WechatUser getWXUserInfo(String openId) throws WechatException,
 			JSONException {
 		JSONObject json = doGetJson(PropsParam.WEIXIN_USER_INFO_SUFFIX,
 				access_token, openId);
 		if (json.optInt("subscribe") == 1) {
-			User user = new User();
+			WechatUser user = new WechatUser();
 			user.setIs_subscribe(json.optInt("subscribe"));
 			user.setOpenid(json.optString("openid"));
 			user.setNickname(json.optString("nickname"));
@@ -112,12 +119,12 @@ public class WechatUtil {
 	 * 
 	 * @param next_openid 第一个拉取的OPENID，不填默认从头开始拉取
 	 * @return
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
-	public UserGet getWXUserOpenId(String next_openid) throws WeixinException,
+	public WechatUserOpenid getWXUserOpenId(String next_openid) throws WechatException,
 			JSONException {
-		UserGet userGet = new UserGet();
+		WechatUserOpenid userGet = new WechatUserOpenid();
 		JSONObject json = doGetJson(PropsParam.WEIXIN_USER_GET_SUFFIX,
 				access_token, next_openid);
 		next_openid = json.optString("next_openid");
@@ -141,11 +148,11 @@ public class WechatUtil {
 	 * 
 	 * @param open_id
 	 * @param content
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
 	public void sendCustomTextMsg(String openId, String content)
-			throws WeixinException, JSONException {
+			throws WechatException, JSONException {
 		JSONObject json = new JSONObject();
 		json.put("touser", openId);
 		json.put("msgtype", "text");
@@ -153,8 +160,7 @@ public class WechatUtil {
 		json.put("text", new JSONObject().put("content", content));
 		json = doPostJson(PropsParam.WEIXIN_MESSAGE_CUSTOM_SEND_SUFFIX, json);
 		if (!JsonUtil.isRetSuccess(json)) {
-			throw new WeixinException("[errcode:" + json.optString("errcode")
-					+ "]:" + json.optString("errmsg"));
+			throw new WechatException(json.optString("errcode"),json.optString("errmsg"));
 		}
 	}
 	
@@ -163,11 +169,11 @@ public class WechatUtil {
 	 * 
 	 * @param open_id
 	 * @param newsItems
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
 	public void sendCustomMultiGraphicMsg(String openId,
-			List<NewsItem> newsItems) throws WeixinException, JSONException {
+			List<NewsItem> newsItems) throws WechatException, JSONException {
 		JSONObject json = new JSONObject();
 		json.put("touser", openId);
 		json.put("msgtype", "news");
@@ -176,8 +182,8 @@ public class WechatUtil {
 		json.put("news", jsonObject);
 		json = doPostJson(PropsParam.WEIXIN_MESSAGE_CUSTOM_SEND_SUFFIX, json);
 		if (!JsonUtil.isRetSuccess(json)) {
-			throw new WeixinException("[errcode:" + json.optString("errcode")
-					+ "]:" + json.optString("errmsg"));
+			throw new WechatException(json.optString("errcode")
+					,json.optString("errmsg"));
 		}
 	}
 	
@@ -197,17 +203,17 @@ public class WechatUtil {
 	 * 
 	 * @param menu_list
 	 * @throws JSONException
-	 * @throws WeixinException
+	 * @throws WechatException
 	 */
-	public void createWXMenu(List<WeixinMenu> menu_list) throws JSONException,
-			WeixinException {
+	public void createWXMenu(List<WechatMenu> menu_list) throws JSONException,
+			WechatException {
 		JSONObject json = new JSONObject();
 		JSONArray button_array = new JSONArray();
-		for (WeixinMenu first_menu : menu_list) {
+		for (WechatMenu first_menu : menu_list) {
 			JSONObject first_json = createWXMenuJson(first_menu);
 			if (first_menu.getSub_button().size() != 0) {
 				JSONArray array = new JSONArray();
-				for (WeixinMenu second_menu : first_menu.getSub_button()) {
+				for (WechatMenu second_menu : first_menu.getSub_button()) {
 					JSONObject second_json = createWXMenuJson(second_menu);
 					array.put(second_json);
 				}
@@ -218,8 +224,7 @@ public class WechatUtil {
 		json.put("button", button_array);
 		json = doPostJson(PropsParam.WEIXIN_MENU_CREATE_SUFFIX, json);
 		if (!JsonUtil.isRetSuccess(json)) {
-			throw new WeixinException("[errcode:" + json.optString("errcode")
-					+ "]:" + json.optString("errmsg"));
+			throw new WechatException(json.optString("errcode"),json.optString("errmsg"));
 		}
 	}
 	
@@ -230,7 +235,7 @@ public class WechatUtil {
 	 * @return
 	 * @throws JSONException
 	 */
-	private JSONObject createWXMenuJson(WeixinMenu menu) throws JSONException {
+	private JSONObject createWXMenuJson(WechatMenu menu) throws JSONException {
 		JSONObject json = new JSONObject();
 		json.put("name", menu.getName());
 		json.put("type", menu.getType());
@@ -243,10 +248,10 @@ public class WechatUtil {
 	 * 查询分组
 	 * 
 	 * @return
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
-	public List<WechatGroup> getWXGroups() throws WeixinException, JSONException {
+	public List<WechatGroup> getWXGroups() throws WechatException, JSONException {
 		JSONObject json = doGetJson(PropsParam.WEIXIN_GROUPS_GET_SUFFIX,access_token);
 		JSONArray array = json.optJSONArray("groups");
 		List<WechatGroup> group_list = new ArrayList<WechatGroup>();
@@ -263,10 +268,10 @@ public class WechatUtil {
 	 * 
 	 * @param name
 	 * @return
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
-	public int createWXGroup(String name) throws WeixinException, JSONException {
+	public int createWXGroup(String name) throws WechatException, JSONException {
 		JSONObject json = new JSONObject();
 		json.put("group", new JSONObject().put("name", name));
 		json = doPostJson(PropsParam.WEIXIN_GROUPS_CREATE_SUFFIX, json);
@@ -274,8 +279,8 @@ public class WechatUtil {
 			json = json.optJSONObject("group");
 			return json.optInt("id");
 		} else {
-			throw new WeixinException("[errcode:" + json.optString("errcode")
-					+ "]:" + json.optString("errmsg"));
+			throw new WechatException(json.optString("errcode")
+					, json.optString("errmsg"));
 		}
 	}
 
@@ -285,10 +290,10 @@ public class WechatUtil {
 	 * @param id
 	 * @param name
 	 * @return
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
-	public int updateWXGroup(int id, String name) throws WeixinException,
+	public int updateWXGroup(int id, String name) throws WechatException,
 			JSONException {
 		JSONObject json = new JSONObject();
 		json.put("group", new JSONObject().put("id", id).put("name", name));
@@ -296,7 +301,7 @@ public class WechatUtil {
 		if (JsonUtil.isRetSuccess(json)) {
 			return id;
 		} else {
-			throw new WeixinException("[errcode:" + json.optString("errcode")
+			throw new WechatException("[errcode:" + json.optString("errcode")
 					+ "]:" + json.optString("errmsg"));
 		}
 	}
@@ -306,17 +311,17 @@ public class WechatUtil {
 	 * 
 	 * @param open_id
 	 * @param to_group_id
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
 	public void updateWXGroupMember(String open_id, int to_group_id)
-			throws WeixinException, JSONException {
+			throws WechatException, JSONException {
 		JSONObject json = new JSONObject();
 		json.put("openid", open_id);
 		json.put("to_groupid", to_group_id);
 		json = doPostJson(PropsParam.WEIXIN_GROUPS_MEMBERS_UPDATE_SUFFIX, json);
 		if (!JsonUtil.isRetSuccess(json)) {
-			throw new WeixinException("[errcode:" + json.optString("errcode")
+			throw new WechatException("[errcode:" + json.optString("errcode")
 					+ "]:" + json.optString("errmsg"));
 		}
 	}
@@ -333,11 +338,11 @@ public class WechatUtil {
 	 * @param expire_seconds 该二维码有效时间，以秒为单位。 最大不超过604800（即7天）
 	 * @param scene_id 场景值ID，临时二维码时为32位非0整型，永久二维码时最大值为100000（目前参数只支持1--100000）
 	 * @return
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
 	public String createQrcode(int action_type, int expire_seconds, int scene_id)
-			throws WeixinException, JSONException {
+			throws WechatException, JSONException {
 		JSONObject json = new JSONObject();
 		if (action_type == 0) {// 临时二维码
 			json.put("expire_seconds", expire_seconds);
@@ -349,7 +354,7 @@ public class WechatUtil {
 				.put("scene_id", scene_id)));
 		json = doPostJson(PropsParam.WEIXIN_QRCODE_CREATE_SUFFIX, json);
 		if (!JsonUtil.isRetSuccess(json)) {
-			throw new WeixinException("[errcode:" + json.optString("errcode")
+			throw new WechatException("[errcode:" + json.optString("errcode")
 					+ "]:" + json.optString("errmsg"));
 		}
 		return json.optString("ticket");
@@ -358,17 +363,22 @@ public class WechatUtil {
 	/**
 	 * 发送模板信息
 	 * @param jsonstr
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
-	public void sendTemplateMsg(String jsonstr) throws WeixinException,
+	public TradeResultFromWechat sendTemplateMsg(String jsonstr) throws WechatException,
 			JSONException {
 		JSONObject json = new JSONObject(jsonstr);
 		json = doPostJson(PropsParam.WEIXIN_SEND_TEMPLATE_MSG_SUFFIX, json);
-		if (!JsonUtil.isRetSuccess(json)) {
-			throw new WeixinException("[errcode:" + json.optString("errcode")
-					+ "]:" + json.optString("errmsg"));
-		}
+//		if (!JsonUtil.isRetSuccess(json)) {
+//			throw new WechatException(json.optString("errcode"),json.optString("errmsg"));
+//		}
+		TradeResultFromWechat result  = new TradeResultFromWechat();
+		result.setResSuccess(JsonUtil.isRetSuccess(json));
+		result.setErrCode(json.optString("errcode"));
+		result.setErrMsg(json.optString("errmsg"));
+		result.setMsgId(json.optString("msgid"));
+		return result;
 	}
 
 	/**
@@ -404,11 +414,11 @@ public class WechatUtil {
 	 * @param suffix
 	 * @param objs 第一个参数存放access_token
 	 * @return
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
 	private JSONObject doGetJson(String suffix, Object... objs)
-			throws WeixinException, JSONException {
+			throws WechatException, JSONException {
 		synchronized (lock) {
 			if (access_token == null)
 				getClient_credential();
@@ -436,11 +446,11 @@ public class WechatUtil {
 	 * @param jsonObject
 	 * @param objs 第一个参数存放access_token
 	 * @return
-	 * @throws WeixinException
+	 * @throws WechatException
 	 * @throws JSONException
 	 */
 	private JSONObject doPostJson(String suffix, JSONObject jsonObject)
-			throws WeixinException, JSONException {
+			throws WechatException, JSONException {
 		synchronized (lock) {
 			if (access_token == null)
 				getClient_credential();
