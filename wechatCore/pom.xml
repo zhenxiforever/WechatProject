@@ -27,6 +27,13 @@
 		</dependency>
 		<!-- wechat project 内部依赖关系 -->
 
+
+		<dependency>
+			<!-- 数据库连接池 以及监控 -->
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>${druid.version}</version>
+		</dependency>
 		<dependency>
 			<!-- dubbo 依赖jar包 -->
 			<groupId>com.alibaba</groupId>

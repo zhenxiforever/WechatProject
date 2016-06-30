@@ -15,6 +15,17 @@ import com.bilibala.wechat.service.wechat.IRequestService;
  */
 public class RequestDispatchServiceImpl implements IRequestDispatchService {
 
+	/**
+	 * 普通消息类型
+	 * 	1 文本消息
+		2 图片消息
+		3 语音消息
+		4 视频消息
+		5 小视频消息
+		6 地理位置消息
+		7 链接消息
+		8 事件消息
+	 */
 	private Map<String, IRequestService> componentMap;
 	
 	/**
@@ -28,6 +39,7 @@ public class RequestDispatchServiceImpl implements IRequestDispatchService {
 	
 	@Override
 	public ResponseMessage dispatch(HttpServletRequest request,RequestMessage requestMessage) throws Exception {
+		
 		IRequestService requestService = componentMap.get(requestMessage.getMsgType());
 		if(requestService!=null){
 			ResponseMessage responseMessage=requestService.handle(request,requestMessage);
