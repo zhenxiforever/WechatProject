@@ -17,6 +17,13 @@ import com.bilibala.wechat.service.IWechatCommService;
 import com.bilibala.wechat.timeschedule.WechatAccountSchedule;
 import com.bilibala.wechat.util.WechatUtil;
 
+/**
+ * 微信公共对外服务接口
+ * 
+ * @project wechatCore
+ * @author smile
+ * @createDate 2016年6月28日
+ */
 public class WechatCommonServiceImpl implements IWechatCommService{
 
 	@Resource

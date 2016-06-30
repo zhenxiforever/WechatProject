@@ -1,4 +1,4 @@
-package com.bilibala.wechat.service;
+package com.bilibala.wechat.service.wechat;
 
 import javax.servlet.http.HttpServletRequest;
 

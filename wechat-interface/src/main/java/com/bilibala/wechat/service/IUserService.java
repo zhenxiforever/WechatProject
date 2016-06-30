@@ -3,6 +3,13 @@ package com.bilibala.wechat.service;
 import com.bilibala.wechat.model.pojo.Qrcode;
 import com.bilibala.wechat.model.pojo.User;
 
+/**
+ * 用户信息 对象服务
+ * 
+ * @project wechat-interface
+ * @author smile
+ * @createDate 2016年6月28日
+ */
 public interface IUserService {
 
 	/**
@@ -15,10 +22,33 @@ public interface IUserService {
 	 */
 	public User queryUserByOpenID(String accountid, String open_id);
 
-	void saveOrUpdateUserInfo(String accountId, User user);
+	/**
+	 * 保存或更新 公众号下用户信息
+	 * @author smile
+	 * @date 2016年6月28日
+	 * @param accountId
+	 * @param user void
+	 */
+	public void saveOrUpdateUserInfo(String accountId, User user);
 
-	void updateSubscribeFlag(String accountId, String openId, int issubscribe);
+	/**
+	 * 更新用户关注状态
+	 * @author smile
+	 * @date 2016年6月28日
+	 * @param accountId
+	 * @param openId
+	 * @param issubscribe void
+	 */
+	public void updateSubscribeFlag(String accountId, String openId, int issubscribe);
 
-	Qrcode getQrcodeByTicket(String accountid, String ticket);
+	/**
+	 * 根据ticket获取二维码信息
+	 * @author smile
+	 * @date 2016年6月28日
+	 * @param accountid
+	 * @param ticket
+	 * @return Qrcode
+	 */
+	public Qrcode getQrcodeByTicket(String accountid, String ticket);
 
 }

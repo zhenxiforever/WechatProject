@@ -7,18 +7,14 @@ import com.bilibala.wechat.model.message.request.impl.TextRequestMessage;
 import com.bilibala.wechat.model.message.response.ResponseMessage;
 
 /**
- * 文本消息对象服务
+ * 文本消息服务对象
  * 
+ * @project wechatCore
+ * @author smile
+ * @createDate 2016年6月28日
  */
 public class TextRequestServiceImpl extends AbstractRequestService {
 	
-	/**
-	 * 请求消息处理
-	 * 
-	 * @param requestMessage 请求消息对象
-	 * @return 响应消息对象
-	 * @throws Exception
-	 */
 	@Override
 	public ResponseMessage handle(HttpServletRequest request,RequestMessage requestMessage) throws Exception {
 		TextRequestMessage textRequestMessage=(TextRequestMessage)requestMessage;

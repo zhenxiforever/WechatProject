@@ -16,6 +16,9 @@ import com.bilibala.wechat.service.IWechatCommService;
 /**
  * 关注事件请求服务
  * 
+ * @project wechatCore
+ * @author smile
+ * @createDate 2016年6月28日
  */
 public class SubscribeEventRequestServiceImpl extends AbstractRequestService {
 
@@ -28,13 +31,6 @@ public class SubscribeEventRequestServiceImpl extends AbstractRequestService {
 	}*/
 	private IWechatCommService wechatCommonService;
 
-	/**
-	 * 关注的处理
-	 * 
-	 * @param requestMessage 请求消息对象
-	 * @return 响应消息对象
-	 * @throws Exception
-	 */
 	@Override
 	public ResponseMessage handle(HttpServletRequest request,RequestMessage requestMessage)
 			throws Exception {

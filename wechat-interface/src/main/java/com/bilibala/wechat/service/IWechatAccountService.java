@@ -12,7 +12,7 @@ import com.bilibala.wechat.model.pojo.WechatAccount;
 public interface IWechatAccountService {
 	
 	/**
-	 * 家在 服务号
+	 * 加载 服务号 信息
 	 * @author smile
 	 * @date 2016年6月20日 void
 	 */

@@ -11,6 +11,9 @@ import com.bilibala.wechat.model.message.response.impl.TextResponseMessage;
 /**
  * 取消关注事件请求服务
  * 
+ * @project wechatCore
+ * @author smile
+ * @createDate 2016年6月28日
  */
 public class UnsubscribeEventRequestServiceImpl extends AbstractRequestService {
 
@@ -22,13 +25,6 @@ public class UnsubscribeEventRequestServiceImpl extends AbstractRequestService {
 //		this.userService = userService;
 //	}
 
-	/**
-	 * 请求消息处理
-	 * 
-	 * @param requestMessage 请求消息对象
-	 * @return 响应消息对象
-	 * @throws Exception
-	 */
 	@Override
 	public ResponseMessage handle(HttpServletRequest request,RequestMessage requestMessage) {
 		TextResponseMessage textResponseMessage = new TextResponseMessage(requestMessage);

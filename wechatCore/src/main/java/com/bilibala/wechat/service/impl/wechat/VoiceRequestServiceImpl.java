@@ -11,25 +11,16 @@ import com.bilibala.wechat.model.message.response.ResponseMessage;
 import com.bilibala.wechat.model.message.response.impl.TextResponseMessage;
 
 /**
- * 语音消息对象服务
+ * 语音请求对象服务
  * 
- * @author 
- * @createTime 
- * @history 1.修改时间,修改;修改内容：
- * 
+ * @project wechatCore
+ * @author smile
+ * @createDate 2016年6月28日
  */
 public class VoiceRequestServiceImpl extends AbstractRequestService {
 
 	private static Logger logger = Logger.getLogger(VoiceRequestServiceImpl.class);
 
-	/**
-	 * 请求消息处理
-	 * 
-	 * @param requestMessage
-	 *            请求消息对象
-	 * @return 响应消息对象
-	 * @throws Exception
-	 */
 	@Override
 	public ResponseMessage handle(HttpServletRequest request,RequestMessage requestMessage)
 			throws Exception {

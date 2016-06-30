@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import com.bilibala.wechat.model.message.request.RequestMessage;
 import com.bilibala.wechat.model.message.response.ResponseMessage;
 import com.bilibala.wechat.model.message.response.impl.TextResponseMessage;
-import com.bilibala.wechat.service.IRequestService;
+import com.bilibala.wechat.service.wechat.IRequestService;
 
 /**
  * 请求消息对象分发接口的抽象类实现

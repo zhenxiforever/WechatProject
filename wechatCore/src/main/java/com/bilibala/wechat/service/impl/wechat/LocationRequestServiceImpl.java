@@ -21,14 +21,6 @@ public class LocationRequestServiceImpl extends AbstractRequestService {
 
 	private static Logger logger = Logger.getLogger(LocationRequestServiceImpl.class);
 
-	/**
-	 * 请求消息处理
-	 * 
-	 * @param requestMessage
-	 *            请求消息对象
-	 * @return 响应消息对象
-	 * @throws Exception
-	 */
 	@Override
 	public ResponseMessage handle(HttpServletRequest request,RequestMessage requestMessage)
 			throws JSONException {

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.bilibala.wechat.model.message.request.EventRequestMessage;
 import com.bilibala.wechat.model.message.request.RequestMessage;
 import com.bilibala.wechat.model.message.response.ResponseMessage;
-import com.bilibala.wechat.service.IRequestService;
+import com.bilibala.wechat.service.wechat.IRequestService;
 
 /**
  * 事件 请求服务
@@ -24,12 +24,6 @@ public class EventRequestServiceImpl implements IRequestService {
 		this.componentMap = componentMap;
 	}
 
-	/**
-	 * 请求消息处理
-	 * @param requestMessage 请求消息对象
-	 * @return 响应消息对象
-	 * @throws Exception
-	 */
 	@Override
 	public ResponseMessage handle(HttpServletRequest request,RequestMessage requestMessage)
 			throws Exception {
