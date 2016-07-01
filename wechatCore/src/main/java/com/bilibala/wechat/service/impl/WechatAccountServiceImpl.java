@@ -31,7 +31,7 @@ public class WechatAccountServiceImpl implements IWechatAccountService{
 	}
 
 	@Override
-	public WechatAccount getWeixinAccountById(String accountId) {
+	public WechatAccount getWechatAccountById(String accountId) {
 		WechatAccount account = wechatAccountDao.getWechatAccountById(accountId);
 		return account;
 	}

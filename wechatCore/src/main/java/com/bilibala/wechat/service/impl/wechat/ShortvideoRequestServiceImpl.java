@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.bilibala.wechat.model.message.request.RequestMessage;
 import com.bilibala.wechat.model.message.response.ResponseMessage;
 import com.bilibala.wechat.model.message.response.impl.TextResponseMessage;
-import com.bilibala.wechat.service.IRequestService;
+import com.bilibala.wechat.service.wechat.IRequestService;
 
 /**
  *  小视频消息对象服务

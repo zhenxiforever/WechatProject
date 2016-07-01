@@ -23,14 +23,14 @@
     <!-- <dubbo:protocol name="dubbo" port="20880" /> 		同dubbo.properties   dubbo.protocol.name dubbo.protocol.port-->
     
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service interface="com.bilibala.wechat.service.IRequestDispatchService" ref="requestDispatchService" time="1000" retries="1" />
+    <dubbo:service interface="com.bilibala.wechat.service.wechat.IRequestDispatchService" ref="requestDispatchService" timeout="1000" retries="1" />
     
-    <dubbo:service interface="com.bilibala.wechat.service.IUserService" ref="userService" time="1000" retries="1" />
+    <dubbo:service interface="com.bilibala.wechat.service.IUserService" ref="userService" timeout="1000" retries="1" />
     
-    <dubbo:service interface="com.bilibala.wechat.service.IWechatAccountService" ref="wechatAccountService" time="1000" retries="1" />
+    <dubbo:service interface="com.bilibala.wechat.service.IWechatAccountService" ref="wechatAccountService" timeout="1000" retries="1" />
     
-    <dubbo:service interface="com.bilibala.wechat.service.IWechatCommService" ref="wechatCommonService" time="1000" retries="1" />
+    <dubbo:service interface="com.bilibala.wechat.service.IWechatCommService" ref="wechatCommonService" timeout="1000" retries="1" />
     
-    <dubbo:service interface="com.bilibala.wechat.service.IMessageLogService" ref="messageLogService" time="1000" retries="1" />
+    <dubbo:service interface="com.bilibala.wechat.service.IMessageLogService" ref="messageLogService" timeout="1000" retries="1" />
     
 </beans>

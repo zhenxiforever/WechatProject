@@ -37,7 +37,7 @@ public class WechatCommonServiceImpl implements IWechatCommService{
 	private WechatUtil getWechatUtil(String accountId) throws Exception{
 		WechatUtil weChatUtil = WechatAccountSchedule.getWeChatUtil(accountId);
 		if(weChatUtil==null){
-			WechatAccount account = wechatAccountService.getWeixinAccountById(accountId);
+			WechatAccount account = wechatAccountService.getWechatAccountById(accountId);
 			if(account!=null){
 				WechatAccountSchedule.put(account);
 				return WechatAccountSchedule.getWeChatUtil(accountId);

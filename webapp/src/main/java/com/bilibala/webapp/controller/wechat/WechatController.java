@@ -8,7 +8,6 @@ import java.io.StringReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,8 +28,15 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.bilibala.wechat.model.message.MessageConverter;
+import com.bilibala.wechat.model.message.request.RequestMessage;
+import com.bilibala.wechat.model.message.response.ResponseMessage;
+import com.bilibala.wechat.model.message.response.impl.TextResponseMessage;
+import com.bilibala.wechat.model.pojo.WechatAccount;
 import com.bilibala.wechat.mp.aes.AesException;
 import com.bilibala.wechat.mp.aes.WXBizMsgCrypt;
+import com.bilibala.wechat.service.IWechatAccountService;
+import com.bilibala.wechat.service.wechat.IRequestDispatchService;
 
 /**
  * 处理微信服务号请求与响应的控制类，核心类
@@ -45,16 +51,16 @@ public class WechatController {
 
 
 
-		private static Logger logger = Logger.getLogger(WeixinChatController.class);
+		private static Logger logger = Logger.getLogger(WechatController.class);
 
 		@Autowired
-		private RequestDispatchService requestDispatchService;	
+		private IRequestDispatchService requestDispatchService;	
 		
 		@Autowired
-		private WeixinAccountService weixinAccountService;		
+		private IWechatAccountService WechatAccountService;		
 
 		/**
-		 * 微信调用doGet接口的校验
+		 * 微信调用doGet接口的校验 公众号参数配置
 		 * @param request
 		 * @param response
 		 * @throws ServletException
@@ -70,7 +76,7 @@ public class WechatController {
 				return;
 			}
 			
-			WeixinAccount account = weixinAccountService.getWeixinAccountById(accountid);
+			WechatAccount account = WechatAccountService.getWechatAccountById(accountid);
 			if(account==null){
 				logger.info("----------check wxb_wechat_account table has data accountid="+accountid+",for return");
 				return;
@@ -87,7 +93,7 @@ public class WechatController {
 
 				if (echostr != null) {
 					try {
-						if (this.checkSignature(request, token)&&DataDicUtil.doField(echostr)) {
+						if (this.checkSignature(request, token)/*&&DataDicUtil.doField(echostr)*/) {
 							response.getWriter().print(echostr+"");
 						}
 					} catch (NoSuchAlgorithmException e) {
@@ -98,28 +104,31 @@ public class WechatController {
 		}
 
 		/**
-		 * 微信调用doPost接口
+		 * 微信调用doPost接口  接收 微信消息
 		 * @param request
 		 * @param response
 		 */
 		@RequestMapping(value = "/WECHAT/HANDLER", method = RequestMethod.POST)
 		public void doPost(HttpServletRequest request, HttpServletResponse response) {
 			logger.info("----------------------------doPost:");
-			response.setCharacterEncoding("UTF-8");
+			/*((ServletRequest) response).setCharacterEncoding("UTF-8");*/
 			response.setContentType("text/xml");
 			String accountId = request.getParameter("accountid");
 			if (accountId == null || "".equals(accountId)) {
 				logger.info("----------accountid is null,check url has accountid,for return");
+				this.replyMsg(response, "");
 				return;
 			}
 			
-			WeixinAccount account = weixinAccountService.getWeixinAccountById(accountId);
+			WechatAccount account = WechatAccountService.getWechatAccountById(accountId);
 			if(account==null){
 				logger.info("----------check wxb_wechat_account table has data accountid="+accountId+",for return");
+				this.replyMsg(response, "");
 				return;
 			}	
 			
 			if(!checkSha(request,account.getToken())){
+				this.replyMsg(response, "");
 				return;
 			}
 			
@@ -161,7 +170,7 @@ public class WechatController {
 			// 消息转换
 			RequestMessage requestMessage = MessageConverter.convertMessage(
 					accountId, xml);
-			requestMessage.setLocalAddr(request.getLocalAddr());
+			requestMessage.setLocalAddr(""/*request.getLocalAddr()*/);
 			requestMessage.setAccountId(accountId);
 			ResponseMessage responseMessage = null;
 			try {
@@ -170,10 +179,11 @@ public class WechatController {
 				logger.error("Exception:", e);
 				TextResponseMessage textResponseMessage = new TextResponseMessage(
 						requestMessage);
-				textResponseMessage.setContent(SystemParameterHelper.getValue(SysConfParam.WX_ERROR_INFO));
+				textResponseMessage.setContent(""/*SystemParameterHelper.getValue(SysConfParam.WX_ERROR_INFO)*/);
 				responseMessage = textResponseMessage;
 			}
 			if (responseMessage == null) {
+				this.replyMsg(response, "");
 				return;
 			}
 			String responseXml = "".equals(responseMessage)?"":responseMessage.toString();
@@ -184,18 +194,7 @@ public class WechatController {
 				logger.info("--------------aes result data:" + responseXml);
 			}
 			
-			if (responseXml == null) {
-				return;
-			}
-			try {
-				response.getWriter().print(responseXml);
-				response.getWriter().close();
-			} catch (Exception e) {
-				logger.error("Exception:", e);
-			}
-			if(!"".equals(responseMessage)){
-				MessageLogHelper.saveMessage(requestMessage, responseMessage);
-			}
+			this.replyMsg(response, responseXml);
 		}
 		
 		/**
@@ -214,7 +213,11 @@ public class WechatController {
 		}
 
 		/**
-		 * 验证签名
+		 * 验证签名</br>
+		 * 加密/校验流程如下：</br>
+			&nbsp;&nbsp;1. 将token、timestamp、nonce三个参数进行字典序排序</br>
+			&nbsp;&nbsp;2. 将三个参数字符串拼接成一个字符串进行sha1加密</br>
+			&nbsp;&nbsp;3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信</br>
 		 * @param request
 		 * @param token
 		 * @return
@@ -229,8 +232,8 @@ public class WechatController {
 			
 			logger.info("--------------signature=" + signature + ",timestamp=" + timestamp
 					+ ",nonce=" + nonce );
-			
-			long timefromdb = Long.parseLong(SystemParameterHelper.getValue(SysConfParam.WX_TIMESS))*1000;
+	/**		时间延迟验证 	*/	
+/*			long timefromdb = Long.parseLong(SystemParameterHelper.getValue(SysConfParam.WX_TIMESS))*1000;
 			long systimes = (new Date()).getTime();
 			long revtimes = Long.parseLong(timestamp)*1000;
 			long starttimes = systimes-timefromdb;
@@ -242,7 +245,7 @@ public class WechatController {
 //				logger.info("----------timestamp check false----------");
 //				return false;
 //			}
-
+*/
 			String[] tempArr = new String[] { token, timestamp, nonce };
 			Arrays.sort(tempArr);
 			String tempStr = tempArr[0] + tempArr[1] + tempArr[2];
@@ -290,7 +293,7 @@ public class WechatController {
 		 * @param request
 		 * @return
 		 */
-		public String decryptXml(String xmlstr, HttpServletRequest request,WeixinAccount account){
+		public String decryptXml(String xmlstr, HttpServletRequest request,WechatAccount account){
 			String result = null;
 			try {
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -341,7 +344,7 @@ public class WechatController {
 		 * @param request
 		 * @return
 		 */
-		public String encryptXml(String xmlstr, HttpServletRequest request,WeixinAccount account){
+		public String encryptXml(String xmlstr, HttpServletRequest request,WechatAccount account){
 			String result = null;
 			try {
 				String token = account.getToken();
@@ -360,5 +363,20 @@ public class WechatController {
 			}
 			return result;
 		}	
+		
+		private void replyMsg(HttpServletResponse response,String responseXml){
+			try {
+				if(responseXml==null||"".equals(responseXml)){
+					responseXml = "success";
+				}
+				response.getWriter().print(responseXml);
+				response.getWriter().close();
+			} catch (Exception e) {
+				logger.error("Exception:", e);
+			}
+			/*if(!"".equals(responseMessage)){
+				MessageLogHelper.saveMessage(requestMessage, responseMessage);
+			}*/
+		}
 	}
 

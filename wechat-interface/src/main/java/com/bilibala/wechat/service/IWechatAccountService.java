@@ -25,5 +25,5 @@ public interface IWechatAccountService {
 	 * @param accountId
 	 * @return WechatAccount
 	 */
-	public WechatAccount getWeixinAccountById(String accountId);
+	public WechatAccount getWechatAccountById(String accountId);
 }
