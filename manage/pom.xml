@@ -40,6 +40,11 @@
 			<artifactId>business-interface</artifactId>
 			<version>${project.wechat.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.bilibala</groupId>
+			<artifactId>common-util</artifactId>
+			<version>${project.wechat.version}</version>
+		</dependency>
 		<!-- wechat project 内部依赖关系 -->
 
 		<dependency>
