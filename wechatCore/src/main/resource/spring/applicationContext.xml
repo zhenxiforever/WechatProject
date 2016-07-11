@@ -34,121 +34,150 @@
 	<!-- spring 加载properties文件 -->
 	<context:property-placeholder location="classpath*:config/jdbc.properties"
 		ignore-unresolvable="true" />
-	<!-- 可读写 数据源 -->
-	<bean id="dataSourceWrite" class="com.alibaba.druid.pool.DruidDataSource"
-		init-method="init" destroy-method="close">
-		<!-- 基本属性 url、user、password -->
-		<property name="url" value="${jdbc.master.url}" />
-		<property name="username" value="${jdbc.master.username}" />
-		<property name="password" value="${jdbc.master.password}" />
+		
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"> 
+    	<property name="driverClass">
+            <value>${jdbc.driverClass}</value> 
+        </property> 
 
-		<!-- 配置初始化大小、最小、最大 -->
-		<property name="initialSize" value="${jdbc.master.initialSize}" />
-		<property name="minIdle" value="${jdbc.master.minIdle}" />
-		<property name="maxActive" value="${jdbc.master.maxActive}" />
+        <property name="jdbcUrl"> 
+            <value>${jdbc.jdbcUrl}</value>
+        </property> 
 
-		<!-- 配置获取连接等待超时的时间 -->
-		<property name="maxWait" value="60000" />
+        <property name="user"> 
+            <value>${jdbc.user}</value> 
+        </property> 
 
-		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
-		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="password"> 
+        	<value>${jdbc.password}</value>
+           	<!-- <value>123456</value> -->
+        </property> 
+    
+    	<!--连接池中保留的最小连接数。--> 
+        <property name="minPoolSize">
+            <value>${jdbc.minPoolSize}</value> 
+        </property> 
 
-		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
-		<property name="minEvictableIdleTimeMillis" value="300000" />
+    	<!--连接池中保留的最大连接数。Default: 15 --> 
+        <property name="maxPoolSize"> 
+            <value>${jdbc.maxPoolSize}</value> 
+        </property> 
 
-		<property name="validationQuery" value="SELECT '1'" />
-		<property name="testWhileIdle" value="true" />
-		<property name="testOnBorrow" value="true" />
-		<property name="testOnReturn" value="false" />
+   		<!--初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。Default: 3 --> 
+        <property name="initialPoolSize"> 
+            <value>${jdbc.initialPoolSize}</value> 
+        </property> 
 
-		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 mysql false -->
-		<property name="poolPreparedStatements" value="false" />
-		<property name="maxPoolPreparedStatementPerConnectionSize"
-			value="20" />
+    	<!--最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 --> 
+        <property name="maxIdleTime"> 
+            <value>${jdbc.maxIdleTime}</value> 
+        </property> 
 
-		<!-- 配置监控统计拦截的filters -->
-		<property name="filters" value="config,stat,log4j,wall" />
-		<property name="connectionProperties" value="config.decrypt=false" />
-	</bean>
-	<!-- 仅读不可写 数据源 -->
-	<bean id="dataSourceRead" class="com.alibaba.druid.pool.DruidDataSource"
-		init-method="init" destroy-method="close">
-		<!-- 基本属性 url、user、password -->
-		<property name="url" value="${jdbc.slave.url}" />
-		<property name="username" value="${jdbc.slave.username}" />
-		<property name="password" value="${jdbc.slave.password}" />
+    	<!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 --> 
+        <property name="acquireIncrement"> 
+            <value>${jdbc.acquireIncrement}</value> 
+        </property>
+        
+        <!--JDBC的标准参数，用以控制数据源内加载的PreparedStatements数量。但由于预缓存的statements
+			属于单个connection而不是整个连接池。所以设置这个参数需要考虑到多方面的因素。 
+			如果maxStatements与maxStatementsPerConnection均为0，则缓存被关闭。Default: 0--> 
+        <property name="maxStatements"> 
+            <value>${jdbc.maxStatements}</value> 
+        </property> 
 
-		<!-- 配置初始化大小、最小、最大 -->
-		<property name="initialSize" value="${jdbc.slave.initialSize}" />
-		<property name="minIdle" value="${jdbc.slave.minIdle}" />
-		<property name="maxActive" value="${jdbc.slave.maxActive}" />
+    	<!--每60秒检查所有连接池中的空闲连接。Default: 0 --> 
+        <property name="idleConnectionTestPeriod"> 
+            <value>${jdbc.idleConnectionTestPeriod}</value> 
+        </property> 
 
-		<!-- 配置获取连接等待超时的时间 -->
-		<property name="maxWait" value="60000" />
+    	<!--定义在从数据库获取新连接失败后重复尝试的次数。Default: 30 --> 
+        <property name="acquireRetryAttempts"> 
+            <value>${jdbc.acquireRetryAttempts}</value> 
+        </property> 
 
-		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
-		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+    	<!--获取连接失败将会引起所有等待连接池来获取连接的线程抛出异常。但是数据源仍有效 
+         	保留，并在下次调用getConnection()的时候继续尝试获取连接。如果设为true，那么在尝试 
+       		 获取连接失败后该数据源将申明已断开并永久关闭。Default: false--> 
+        <property name="breakAfterAcquireFailure"> 
+            <value>${jdbc.breakAfterAcquireFailure}</value> 
+        </property>
+        
+        <!--因性能消耗大请只在需要的时候使用它。如果设为true那么在每个connection提交的
+           	 时候都将校验其有效性。建议使用idleConnectionTestPeriod或automaticTestTable
+           	 等方法来提升连接测试的性能。Default: false --> 
+        <property name="testConnectionOnCheckout"> 
+            <value>${jdbc.testConnectionOnCheckout}</value> 
+        </property> 
+    </bean>
 
-		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
-		<property name="minEvictableIdleTimeMillis" value="300000" />
-
-		<property name="validationQuery" value="SELECT '1'" />
-		<property name="testWhileIdle" value="true" />
-		<property name="testOnBorrow" value="false" />
-		<property name="testOnReturn" value="false" />
-
-		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 mysql false -->
-		<property name="poolPreparedStatements" value="false" />
-		<property name="maxPoolPreparedStatementPerConnectionSize"
-			value="20" />
-
-		<!-- 配置监控统计拦截的filters -->
-		<property name="filters" value="config,stat,log4j,wall" />
-		<property name="connectionProperties" value="config.decrypt=false" />
-	</bean>
-
-	<!-- 可写的SessionFactory sqlWriteSessionFactory -->
-	<bean id="sqlWriteSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
-		scope="singleton">
-		<property name="dataSource" ref="dataSourceWrite" />
-		<property name="configLocation" value="classpath:config/mybatis-config.xml" />
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">        
+		<property name="dataSource" ref="dataSource" />  
+		<property name="mapperLocations" value="classpath:/config/mybatis/${jdbc.dialect}/*Mapper.xml"/>  
 	</bean>
 	
-	<bean id="writableSQLSession" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg index="0" ref="sqlWriteSessionFactory" />
-	</bean>
 
-	<!-- 只读的SessionFactory sqlReadOnlySessionFactory -->
-	<bean id="sqlReadOnlySessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
-		scope="singleton">
-		<property name="dataSource" ref="dataSourceRead" />
-		<property name="configLocation" value="classpath:config/mybatis-config.xml" />
+	<bean id="messageLogDao" class="org.mybatis.spring.mapper.MapperFactoryBean">        
+		<property name="mapperInterface" value="com.bilibala.wechat.dao.MessageLogDao"></property>        
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>    
 	</bean>
-
-	<bean id="readonlySQLSession" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg index="0" ref="sqlReadOnlySessionFactory" />
+	
+	<bean id="wechatUserDao" class="org.mybatis.spring.mapper.MapperFactoryBean">        
+		<property name="mapperInterface" value="com.bilibala.wechat.dao.WechatUserDao"></property>        
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>    
 	</bean>
+	
+	<bean id="wechatAccountDao" class="org.mybatis.spring.mapper.MapperFactoryBean">        
+		<property name="mapperInterface" value="com.bilibala.wechat.dao.WechatAccountDao"></property>        
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>    
+	</bean>
+	
+	<bean id="wechatMenuDao" class="org.mybatis.spring.mapper.MapperFactoryBean">        
+		<property name="mapperInterface" value="com.bilibala.wechat.dao.WechatMenuDao"></property>        
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>    
+	</bean>
+	
 	
 	<!-- 事务配置 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSourceWrite" />
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 	<!-- enable the configuration of transactional behavior based on annotations -->
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>  
+            <tx:method name="create*" />  
+            <tx:method name="modify*" />  
+            <tx:method name="update*" /> 
+            <tx:method name="remove*" />  
+            <tx:method name="save*" /> 
+            <tx:method name="delete*" /> 
+            <tx:method name="execute*"/>
+            <tx:method name="handle*"/>
+            <tx:method name="*" read-only="true"/>
+        </tx:attributes>  
+    </tx:advice>
 	
+	<aop:config>  
+        <aop:pointcut id="txPointcut" expression="execution(* com.bilibala.wechat.service.*.*Service.*(..))" />  
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+    </aop:config>
 	
-	
+	<!-- 服务service  -->
 	<bean id="messageLogService" class="com.bilibala.wechat.service.impl.MessageLogServiceImpl">
+		<property name="messageLogDao" ref="messageLogDao"/>
 	</bean>
 	
 	<bean id="userService" class="com.bilibala.wechat.service.impl.UserServiceImpl">
+		<property name="wechatUserDao" ref="wechatUserDao"/>
 	</bean>
 	
 	<bean id="wechatAccountService" class="com.bilibala.wechat.service.impl.WechatAccountServiceImpl">
+		<property name="wechatAccountDao" ref="wechatAccountDao"/>
 	</bean>
 	
 	<bean id="wechatCommonService" class="com.bilibala.wechat.service.impl.WechatCommonServiceImpl">
+		<property name="wechatAccountService" ref="wechatAccountService"/>
 	</bean>
 	
 	<bean id="requestDispatchService" class="com.bilibala.wechat.service.impl.wechat.RequestDispatchServiceImpl">
@@ -165,27 +194,13 @@
 		</property>
 	</bean>
 	
-	<bean id="textRequestService" class="com.bilibala.wechat.service.impl.wechat.TextRequestServiceImpl">
-	</bean>
-	
-	<bean id="imageRequestService" class="com.bilibala.wechat.service.impl.wechat.ImageRequestServiceImpl">
-	</bean>
-	
-	<bean id="voiceRequestService" class="com.bilibala.wechat.service.impl.wechat.VoiceRequestServiceImpl">
-	</bean>
-	
-	<bean id="videoRequestService" class="com.bilibala.wechat.service.impl.wechat.VideoRequestServiceImpl">
-	</bean>
-	
-	<bean id="shortvideoRequestService" class="com.bilibala.wechat.service.impl.wechat.ShortvideoRequestServiceImpl">
-	</bean>
-	
-	<bean id="locationRequestService" class="com.bilibala.wechat.service.impl.wechat.LocationRequestServiceImpl">
-	</bean>
-	
-	<bean id="linkRequestService" class="com.bilibala.wechat.service.impl.wechat.LinkRequestServiceImpl">
-	</bean>
-	
+	<bean id="textRequestService" class="com.bilibala.wechat.service.impl.wechat.TextRequestServiceImpl"/>
+	<bean id="imageRequestService" class="com.bilibala.wechat.service.impl.wechat.ImageRequestServiceImpl"/>
+	<bean id="voiceRequestService" class="com.bilibala.wechat.service.impl.wechat.VoiceRequestServiceImpl"/>
+	<bean id="videoRequestService" class="com.bilibala.wechat.service.impl.wechat.VideoRequestServiceImpl"/>
+	<bean id="shortvideoRequestService" class="com.bilibala.wechat.service.impl.wechat.ShortvideoRequestServiceImpl"/>
+	<bean id="locationRequestService" class="com.bilibala.wechat.service.impl.wechat.LocationRequestServiceImpl"/>
+	<bean id="linkRequestService" class="com.bilibala.wechat.service.impl.wechat.LinkRequestServiceImpl"/>
 	<bean id="eventRequestService" class="com.bilibala.wechat.service.impl.wechat.EventRequestServiceImpl">
 		<property name="componentMap">
 			<map>
@@ -199,24 +214,13 @@
 			</map>
 		</property>
 	</bean>
-	
-	<bean id="subscribeEventRequestService" class="com.bilibala.wechat.service.impl.wechat.SubscribeEventRequestServiceImpl">
-	</bean>
-	
-	<bean id="unsubscribeEventRequestService" class="com.bilibala.wechat.service.impl.wechat.UnsubscribeEventRequestServiceImpl">
-	</bean>
-	
-	<bean id="scanEventRequestService" class="com.bilibala.wechat.service.impl.wechat.ScanEventRequestServiceImpl">
-	</bean>
-	
-	<bean id="clickEventRequestService" class="com.bilibala.wechat.service.impl.wechat.ClickEventRequestServiceImpl">
-	</bean>
-	
-	<bean id="viewEventRequestService" class="com.bilibala.wechat.service.impl.wechat.ViewEventRequestServiceImpl">
-	</bean>
-	
-	<bean id="templateEventRequestService" class="com.bilibala.wechat.service.impl.wechat.TemplateEventRequestServiceImpl">
-	</bean>
+	<bean id="subscribeEventRequestService" class="com.bilibala.wechat.service.impl.wechat.SubscribeEventRequestServiceImpl"/>
+	<bean id="unsubscribeEventRequestService" class="com.bilibala.wechat.service.impl.wechat.UnsubscribeEventRequestServiceImpl"/>
+	<bean id="scanEventRequestService" class="com.bilibala.wechat.service.impl.wechat.ScanEventRequestServiceImpl"/>
+	<bean id="clickEventRequestService" class="com.bilibala.wechat.service.impl.wechat.ClickEventRequestServiceImpl"/>
+	<bean id="viewEventRequestService" class="com.bilibala.wechat.service.impl.wechat.ViewEventRequestServiceImpl"/>
+	<bean id="templateEventRequestService" class="com.bilibala.wechat.service.impl.wechat.TemplateEventRequestServiceImpl"/>
+
 	
 	<!-- 导入  dubbo 服务 -->
 	<import resource="spring-provider.xml" />

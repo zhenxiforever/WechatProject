@@ -1,5 +1,7 @@
 package com.bilibala.wechat.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.bilibala.wechat.model.pojo.Qrcode;
 import com.bilibala.wechat.model.pojo.User;
 
@@ -20,7 +22,7 @@ public interface WechatUserDao {
 	 * @param open_id
 	 * @return User
 	 */
-	public User queryUserByOpenID(String accountid, String open_id);
+	public User queryUserByOpenID(@Param("schema")String schema, @Param("openid")String openid);
 
 	/**
 	 * 保存用户信息
@@ -28,7 +30,7 @@ public interface WechatUserDao {
 	 * @date 2016年6月28日
 	 * @param user void
 	 */
-	public void saveUser(User user);
+	public void saveUser(@Param("schema")String schema,User user);
 
 	/**
 	 * 根据公众号id，更新数据库中用户信息
@@ -37,7 +39,7 @@ public interface WechatUserDao {
 	 * @param accountId
 	 * @param user void
 	 */
-	public void updateUser(String accountId, User user);
+	public void updateUser(@Param("schema")String schema, User user);
 
 	/**
 	 * 更新用户关注状态
@@ -47,7 +49,7 @@ public interface WechatUserDao {
 	 * @param openId
 	 * @param issubscribe void
 	 */
-	public void updateSubscribeFlag(String accountId, String openId, int issubscribe);
+	public void updateSubscribeFlag(@Param("schema")String schema, @Param("openid")String openId, @Param("issubscribe")int issubscribe);
 
 	/**
 	 * 获取二维码
@@ -57,6 +59,6 @@ public interface WechatUserDao {
 	 * @param ticket
 	 * @return Qrcode
 	 */
-	public Qrcode getQrcodeByTicket(String accountid, String ticket);
+	public Qrcode getQrcodeByTicket(@Param("schema")String schema, @Param("ticket")String ticket);
 
 }

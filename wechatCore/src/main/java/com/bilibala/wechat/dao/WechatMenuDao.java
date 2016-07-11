@@ -2,6 +2,8 @@ package com.bilibala.wechat.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.bilibala.wechat.model.pojo.WechatMenu;
 
 /**
@@ -20,7 +22,7 @@ public interface WechatMenuDao {
 	 * @param eventKey
 	 * @return WechatMenu
 	 */
-	public WechatMenu queryMenuById(String accountId, String eventKey);
+	public WechatMenu queryMenuById(@Param("schema")String schema,@Param("id") String id);
 
 	/**
 	 * 根据公众号id 获取公众号父菜单下子菜单列表
@@ -30,6 +32,6 @@ public interface WechatMenuDao {
 	 * @param parent_id
 	 * @return List<WechatMenu>
 	 */
-	public List<WechatMenu> queryMenuListByParentId(String accountid, String parent_id);
+	public List<WechatMenu> queryMenuListByParentId(@Param("schema")String schema,@Param("parentid")String parent_id);
 
 }

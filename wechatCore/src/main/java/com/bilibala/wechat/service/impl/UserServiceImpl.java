@@ -30,7 +30,7 @@ public class UserServiceImpl implements IUserService {
 		User dbUser=wechatUserDao.queryUserByOpenID(accountId, user.getOpenid());
 		if(dbUser==null){
 			user.setAccountid(accountId); 
-			wechatUserDao.saveUser(user);
+			wechatUserDao.saveUser(accountId,user);
 		}
 		else{
 			user.setId(dbUser.getId());

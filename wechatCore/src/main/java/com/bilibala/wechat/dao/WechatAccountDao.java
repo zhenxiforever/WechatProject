@@ -2,6 +2,8 @@ package com.bilibala.wechat.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.bilibala.wechat.model.pojo.WechatAccount;
 
 /**
@@ -28,5 +30,5 @@ public interface WechatAccountDao {
 	 * @param accountid
 	 * @return WechatAccount 微信账号信息
 	 */
-	public WechatAccount getWechatAccountById(String accountid);
+	public WechatAccount getWechatAccountById(@Param("id")String accountid);
 }

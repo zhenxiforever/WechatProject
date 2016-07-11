@@ -1,7 +1,5 @@
 package com.bilibala.wechat.spring;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.bilibala.wechat.model.message.request.RequestMessage;
@@ -13,14 +11,14 @@ public class SpringBeanTest {
 
 	private IRequestDispatchService requestDispatchService;
 	
-	@Before
+//	@Before
     public void init(){
 		ClassPathXmlApplicationContext testContext = new ClassPathXmlApplicationContext("classpath*:spring/applicationContext*.xml");
 		testContext.start();
         requestDispatchService = (IRequestDispatchService) testContext.getBean("requestDispatchService");
     }
 	
-	@Test
+//	@Test
 	public void beanTest(){
 		RequestMessage requestMessage = new TextRequestMessage("",null );
 		try {
