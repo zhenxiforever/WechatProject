@@ -5,11 +5,9 @@
   <parent>
     <groupId>com.bilibala</groupId>
     <artifactId>wechat</artifactId>
-    <version>${project.wechat.version}</version>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>com.bilibala</groupId>
   <artifactId>common-exception</artifactId>
-  <version>${project.wechat.version}</version>
   <name>common-exception</name>
   <url>http://maven.apache.org</url>
   <properties>

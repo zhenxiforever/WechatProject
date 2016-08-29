@@ -48,7 +48,7 @@ import com.bilibala.wechat.service.wechat.IRequestDispatchService;
 public class WechatController {
 
 	private static LoggerWebHand logger = LoggerWebHand
-			.getLogger(WechatController.class);
+			.getLogger(/*WechatController.class*/);
 
 	@Autowired
 	private IRequestDispatchService requestDispatchService;
