@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
-import com.bilibala.manage.model.SysUser;
+import com.bilibala.manage.dao.model.SysUser;
+import com.bilibala.manage.helper.SystemHelper;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
@@ -21,6 +22,9 @@ import com.opensymphony.xwork2.ActionSupport;
 public class BaseAction extends ActionSupport implements ServletRequestAware,
 		ServletResponseAware {
 
+	protected final int SYS_ERR_CODE = 1000;
+	protected final String RE_LOGIN = "RE_LOGIN";
+	
 	/**
 	 * long
 	 */
@@ -49,8 +53,7 @@ public class BaseAction extends ActionSupport implements ServletRequestAware,
 	}
 
 	public SysUser getLoginUser() {
-        Object o = request.getSession().getAttribute("userVo");
-        return o == null ? null : (SysUser) o;
+        return SystemHelper.getCurrentUserInfo(request);
     }
 
     public static String getIpAddr(HttpServletRequest request) {

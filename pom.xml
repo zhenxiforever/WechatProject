@@ -5,7 +5,7 @@
 	<!-- 微信项目 父配�?属�? -->
 	<groupId>com.bilibala</groupId>
 	<artifactId>wechat</artifactId>
-	<version>${project.wechat.version}</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>wechat</name>
 	<description>wechat project group .the all project maven parent.</description>
 	<!-- 微信项目 父配�?类型 -->

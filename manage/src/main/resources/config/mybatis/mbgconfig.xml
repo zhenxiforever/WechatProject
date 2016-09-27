@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	
+	  <!-- 加载jdbc配置文件 -->
+	<properties resource="config/jdbc.properties"/>
+	
+	<!-- 加载项目中classpath下的驱动jar包 -->
+	<classPathEntry location="E:/EclipseWorkspace/GitHub/WechatProjectGroup/manage/target/manage/WEB-INF/lib/mysql-connector-java-5.1.23.jar" />
+	
+	<context id="DB2Tables"  targetRuntime="MyBatis3">
+		<!-- 生成类的注释信息 -->
+		<commentGenerator>
+		      <property name="suppressAllComments" value="false"/><!-- 生成注释  -->
+		      <property name="suppressDate" value="true"/><!-- 阻止生成注释时间戳 -->
+		</commentGenerator>
+		<!-- 数据库连接信息 -->
+		<jdbcConnection driverClass="${jdbc.driverClass}"
+                connectionURL="${jdbc.jdbcUrl}"
+                userId="${jdbc.user}"
+                password="${jdbc.password}">
+		</jdbcConnection>
+		<!-- 数据类型同java类型  转换定义-->
+		<javaTypeResolver >
+		      <property name="forceBigDecimals" value="false" /><!-- 根据 数据库精度是否转对应数据类型 -->
+		      <!-- 
+		      	如果精度>0或者长度>18，就会使用java.math.BigDecimal
+				如果精度=0并且10<=长度<=18，就会使用java.lang.Long
+				如果精度=0并且5<=长度<=9，就会使用java.lang.Integer
+				如果精度=0并且长度<5，就会使用java.lang.Short
+		       -->
+		</javaTypeResolver>
+		<!-- 设置生成的实体类相关 位置以及属性 -->		
+		<javaModelGenerator targetPackage="com.bilibala.manage.dao.model" targetProject="manage">
+		      <property name="enableSubPackages" value="true" />
+		      <property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<!-- map xml 的映射 类型以及位置  -->
+		<sqlMapGenerator targetPackage="com.bilibala.manage.dao.map"
+			targetProject="manage">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!--  -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.bilibala.manage.dao.mapper" targetProject="manage">
+			<!--  context 的 targetRuntime="MyBatis3"是有以下：
+				ANNOTATEDMAPPER:基于注解的Mapper接口，不会有对应的XML映射文件
+				MIXEDMAPPER:XML和注解的混合形式，(上面这种情况中的)SqlProvider注解方法会被XML替代。
+				XMLMAPPER:所有的方法都在XML中，接口调用依赖XML文件。
+			 -->
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		
+		<table tableName="%" />
+<!-- 		<table tableName="sys_conf" domainObjectName="SysConf"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="sys_func" domainObjectName="SysFunction"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="sys_func_url" domainObjectName="SysFuncUrl"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="sys_log_oper" domainObjectName="SysLogOper"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="sys_menu" domainObjectName="SysMenu"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="sys_operate" domainObjectName="SysOperate"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="sys_role" domainObjectName="SysRole"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="sys_role_func" domainObjectName="SysRoleFunc"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="sys_url" domainObjectName="SysUrl"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="sys_user" domainObjectName="SysUser"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="sys_user_role" domainObjectName="SysUserRole"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="user_account" domainObjectName="UserAccount"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="wx_account" domainObjectName="WechatAccount"><property name="useActualColumnNames" value="true" /></table>
+		<table tableName="wx_module" domainObjectName="WechatModule"><property name="useActualColumnNames" value="true" /></table>
+	 -->
+		
+	</context>
+	
+</generatorConfiguration>

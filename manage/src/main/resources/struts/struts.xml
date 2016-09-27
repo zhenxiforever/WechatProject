@@ -2,20 +2,21 @@
 <struts>
 	<include file="struts-default.xml" />
 	<include file="struts-plugin.xml" />
-	<!--用于子项目扩展 -->
-	<include file="../conf/structs/custom.xml" />
+
 	<constant name="struts.multipart.saveDir" value="/tmp"></constant>
 	<constant name="struts.multipart.maxSize" value="1000000000"></constant>
 	<constant name="struts.action.excludePattern" value="/js/ueditor136/.*" />
-
+	<constant name="struts.action.extension" value="do,action" />
 	<!-- 配置后缀可以是action也可以是do -->
 
-	<!-- 定义一些拦截器 -->
-	<package name="index" extends="struts-default">
-		<interceptors>
-			<interceptor name="login" class="com.bilibala.manage.filter.CheckLoginInterceptor"/>
-			<interceptor name="authority" class="com.bilibala.manage.filter.CheckAuthorityInterceptor"/>
 
+	<!-- 定义一些拦截器 -->
+	<package name="index" extends="struts-default" >
+		<interceptors>
+			<!-- 登陆验证拦截 -->
+			<interceptor name="login" class="com.bilibala.manage.filter.CheckLoginInterceptor"/>
+			<!-- 权限验证拦截 -->
+			<interceptor name="authority" class="com.bilibala.manage.filter.CheckAuthorityInterceptor"/>
 			<interceptor-stack name="gloableStack">
 				<interceptor-ref name="login" />
 				<interceptor-ref name="defaultStack" />
@@ -24,19 +25,19 @@
 		</interceptors>
 		
 		<global-results>
-			<result name="login">/admin/loginuser.jsp</result>
+			<result name="RE_LOGIN">login.jsp</result>
 		</global-results>
 		<action name="index" class="com.bilibala.manage.action.IndexAction">
-			<result name="OK_01">/admin/index.jsp</result>
-			<result name="RE_LOGIN">/admin/loginuser.jsp</result>
+			<result name="success">index.jsp</result>
 		</action>
-		<action name="login" class="com.bilibala.manage.action.IndexAction" method="login">
-			<result name="success">/admin/index.jsp</result>
+		<action name="login" class="com.bilibala.manage.action.IndexAction" method="login"/>
+		<action name="loginout" class="com.bilibala.manage.action.IndexAction" method="loginout">
+			<result name="success">index.jsp</result>
 		</action>
 	</package>
-	<package name="manage" extends="index">
+	
+	<package name="sysuser" extends="index"  namespace="/sysuser">
 		<default-interceptor-ref name="gloableStack" />
-		
-		
+		<action name="menutree" class="com.bilibala.manage.action.IndexAction" method="getMenuTreeByUser"/>
 	</package>
 </struts>

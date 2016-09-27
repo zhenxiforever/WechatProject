@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -134,8 +134,8 @@
 </script>
 <script type="text/javascript"> 
 	var appIndex = {
-		urlGetFunctions : top.window.WXYH.base + "/sys/user/menu.do",//菜单url
-		urlLogout : top.window.WXYH.base + "/sys/user/logout.do" //注销url
+		urlGetFunctions : top.window.WXYH.base + "/sysuser/menutree.do",//菜单url
+		urlLogout : top.window.WXYH.base + "/loginout.do" //注销url
 	}
 	var G = {
 		config:{},
@@ -283,11 +283,14 @@
 			var body = xhr.responseText; 
 			var respObj = eval("("+body+")");
 			if(respObj.retcode==-1000){
-				alert("用户已经超时或未登录，请重新登录");
+				$.messager.alert("错误","用户已经超时或未登录，请重新登录");
 				top.location.replace("login.html");
 				return;
 			}else if(respObj.retcode==-2000){
-				alert("用户没有权限，请联系管理设置");
+				$.messager.alert("错误","用户没有权限，请联系管理设置");
+				return;
+			}else if(respObj.retcode==1000){
+				$.messager.alert("错误","系统出错，请稍后再试!");
 				return;
 			}
 		}

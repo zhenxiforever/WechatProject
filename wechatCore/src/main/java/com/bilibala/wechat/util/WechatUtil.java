@@ -7,8 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.bilibala.common.util.JsonUtil;
 import com.bilibala.common.util.PropsUtil;
-
 import com.bilibala.common.util.SSLNetProvider;
 import com.bilibala.exception.WechatException;
 import com.bilibala.wechat.model.pojo.NewsItem;
