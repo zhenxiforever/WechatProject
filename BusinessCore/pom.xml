@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.bilibala</groupId>
 		<artifactId>wechat</artifactId>
-		<version>${project.wechat.version}</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>businessCore</artifactId>
@@ -45,12 +45,12 @@
 		<dependency>
 			<groupId>com.bilibala</groupId>
 			<artifactId>business-interface</artifactId>
-			<version>${project.wechat.version}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bilibala</groupId>
 			<artifactId>common-util</artifactId>
-			<version>${project.wechat.version}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- wechat project 内部依赖关系 -->
 

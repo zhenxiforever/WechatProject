@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.bilibala</groupId>
 		<artifactId>wechat</artifactId>
-		<version>${project.wechat.version}</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>webapp</artifactId>
@@ -38,12 +38,12 @@
 		<dependency>
 			<groupId>com.bilibala</groupId>
 			<artifactId>business-interface</artifactId>
-			<version>${project.wechat.version}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bilibala</groupId>
 			<artifactId>wechat-interface</artifactId>
-			<version>${project.wechat.version}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- -->
 
@@ -129,6 +129,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-expression</artifactId>
 			<version>${spring.version}</version>
+			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

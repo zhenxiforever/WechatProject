@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.bilibala</groupId>
 		<artifactId>wechat</artifactId>
-		<version>${project.wechat.version}</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>wechatCore</artifactId>
@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>com.bilibala</groupId>
 			<artifactId>wechat-interface</artifactId>
-			<version>${project.wechat.version}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- wechat project 内部依赖关系 -->
 
@@ -73,11 +73,11 @@
 			<artifactId>druid</artifactId>
 			<version>${druid.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>c3p0</groupId>
 			<artifactId>c3p0</artifactId>
 			<version>0.9.1.2</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
