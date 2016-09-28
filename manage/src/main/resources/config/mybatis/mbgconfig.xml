@@ -9,7 +9,7 @@
 	<properties resource="config/jdbc.properties"/>
 	
 	<!-- 加载项目中classpath下的驱动jar包 -->
-	<classPathEntry location="E:/EclipseWorkspace/GitHub/WechatProjectGroup/manage/target/manage/WEB-INF/lib/mysql-connector-java-5.1.23.jar" />
+	<classPathEntry location="C:/Users/lenovo/.m2/repository/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
 	
 	<context id="DB2Tables"  targetRuntime="MyBatis3">
 		<!-- 生成类的注释信息 -->
