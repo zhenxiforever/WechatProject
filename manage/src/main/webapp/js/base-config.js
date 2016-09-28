@@ -169,8 +169,8 @@ function parseToEasyUITreeNodeObject(data,menulevel){
 		if(data[i]["childMenu"]!=undefined&&data[i].childMenu.length>0){
 			var c = parseToEasyUITreeNodeObject(data[i].childMenu,(menulevel+1));
 			item.children=c;
-		}else{
-			item.state = "closed";
+		}else if(data[i]["parentid"]!=undefined&&data[i]["parentid"]!=0){
+			item.state = "";
 		}
 		arr.push(item);
 	}

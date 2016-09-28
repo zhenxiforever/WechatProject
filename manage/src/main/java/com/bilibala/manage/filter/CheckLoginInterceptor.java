@@ -1,5 +1,13 @@
 package com.bilibala.manage.filter;
 
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,7 +30,7 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
  * @author smile
  * @date 2016年7月25日
  */
-public class CheckLoginInterceptor extends AbstractInterceptor {
+public class CheckLoginInterceptor extends AbstractInterceptor implements Filter{
 
 	Logger logger = Logger.getLogger(CheckLoginInterceptor.class);
 	
@@ -37,8 +45,8 @@ public class CheckLoginInterceptor extends AbstractInterceptor {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		String type = request.getHeader("X-Requested-With");//请求类型
         String url = request.getRequestURL().toString();//请求URL
-        logger.info("用户请求地址["+action.toString()+"]");
-        if (action instanceof IndexAction || url.indexOf("loginuser.jsp") != -1) {
+        logger.info("用户请求地址["+url+"]["+invocation.getInvocationContext().getName()+"]");
+        if (/*action instanceof IndexAction ||*/ url.indexOf("loginuser.jsp") != -1) {
         	return invocation.invoke();
         }
         
@@ -59,8 +67,37 @@ public class CheckLoginInterceptor extends AbstractInterceptor {
                  return null;  
              }  */
         	
-            return "login";
+            return "RE_LOGIN";
         }
 	}
 
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response,
+			FilterChain chain) throws IOException, ServletException {
+		// TODO Auto-generated method stub
+		HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+
+        SysUser sysuser = SystemHelper.getCurrentUserInfo(req);
+        if (sysuser == null) {
+            if (req.getRequestURL().indexOf("loginuser.jsp") == -1) {
+
+                String path = req.getContextPath();
+                String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+                res.sendRedirect(basePath + "loginuser.jsp");
+            } else {
+                chain.doFilter(request, response);
+            }
+        } else {
+            chain.doFilter(request, response);
+        }
+	}
+
+	
 }

@@ -105,7 +105,7 @@ public interface SysMenuMapper {
      * @return 
      * @return List<SysMenu>
      */
-	List<SysMenu> getMenuListByUserid(String userid);
+	List<SysMenu> getMenuListByUserid(@Param("userId") String userId);
 
 	/**
 	 * 获取系统大功能菜单

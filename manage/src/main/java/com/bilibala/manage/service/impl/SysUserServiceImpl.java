@@ -55,7 +55,7 @@ public class SysUserServiceImpl extends BaseService implements ISysUserService {
 		for(SysMenu sysmenu:menuList){
 			SysMenu menu = menuMap.get(sysmenu.getParentid());
 			if(menu!=null){
-				menu.addChiledMenu(menu);
+				menu.addChiledMenu(sysmenu);
 			}
 		}
 		

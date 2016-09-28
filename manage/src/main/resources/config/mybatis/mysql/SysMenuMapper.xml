@@ -4,23 +4,28 @@
 
 	<!-- 获取用户能查看的菜单 -->
 	<select id="getMenuListByUserid" resultType="com.bilibala.manage.dao.model.SysMenu" parameterType="java.lang.String">
-	    select DISTINCT sm.* from sys_menu sm JOIN sys_func sf ON sm.MENUID = sf.MENUID
-		 JOIN sys_role_func srf ON srf.FUNCID = sf.FUNCID
-		 JOIN sys_user_role sur ON srf.ROLEID = sur.ROLEID 
-		 JOIN sys_role sr ON sr.ROLEID = sur.ROLEID
+	    select DISTINCT sm.* from <include refid="schema" />.sys_menu sm 
+	     JOIN <include refid="schema" />.sys_func sf ON sm.MENUID = sf.MENUID
+		 JOIN <include refid="schema" />.sys_role_func srf ON srf.FUNCID = sf.FUNCID
+		 JOIN <include refid="schema" />.sys_user_role sur ON srf.ROLEID = sur.ROLEID 
+		 JOIN <include refid="schema" />.sys_role sr ON sr.ROLEID = sur.ROLEID
 		 WHERE sr.DISABLE = '0' 
 			<if test="userId !='admin'">
-				 and sur.USERID= #{userId}
+				 and sur.USERID= #{userId,jdbcType=VARCHAR}
 			</if>
-			order by menu.sort,menu.parentid
+			order by sm.SORT,sm.parentid
 	</select>
 
 	<!-- 获取用户能查看的菜单 -->
 	<select id="getParentMenuList" resultType="com.bilibala.manage.dao.model.SysMenu">
-	    select DISTINCT sm.* from sys_menu sm 
+	    select DISTINCT sm.* from <include refid="schema" />.sys_menu sm 
 		WHERE sm.parentid = '0' 
-		order by menu.sort,menu.menuid
+		order by sm.sort,sm.menuid
 	</select>
+
+	<sql id="schema" >
+   	 	wechatmanage
+  	</sql>
 
   <resultMap id="BaseResultMap" type="com.bilibala.manage.dao.model.SysMenu" >
     <!--
