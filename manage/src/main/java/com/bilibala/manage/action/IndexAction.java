@@ -56,6 +56,7 @@ public class IndexAction extends BaseAction{
 				rtn.setMessage("登录失败，用户名或密码错误！");
 			}
 		} catch (Exception ex){
+			logger.info("用户登陆失败！", ex);
 			rtn.setCode(SYS_ERR_CODE);
 			rtn.setMessage("登录失败，系统错误！");
 		}

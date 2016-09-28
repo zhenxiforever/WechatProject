@@ -10,7 +10,7 @@ import com.bilibala.wechat.model.pojo.User;
  * @author smile
  * @createDate 2016年6月28日
  */
-public interface IUserService {
+public interface IWechatUserService {
 
 	/**
 	 * 根据 帐户accountid ，openid获取用户信息

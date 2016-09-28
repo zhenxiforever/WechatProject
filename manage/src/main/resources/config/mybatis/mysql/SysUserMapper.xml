@@ -13,7 +13,7 @@
 	 <update id="updateUserPasswd" parameterType="map" >
 	    update sys_user
 	    set PASSWORD = #{password,jdbcType=VARCHAR}
-	    where USERID = USERID = #{loginUser.userid,jdbcType=VARCHAR},
+	    where USERID = #{loginUser.userid,jdbcType=VARCHAR}
 	  </update>
 
 

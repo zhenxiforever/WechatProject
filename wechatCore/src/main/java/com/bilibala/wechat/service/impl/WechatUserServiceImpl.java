@@ -3,7 +3,7 @@ package com.bilibala.wechat.service.impl;
 import com.bilibala.wechat.dao.WechatUserDao;
 import com.bilibala.wechat.model.pojo.Qrcode;
 import com.bilibala.wechat.model.pojo.User;
-import com.bilibala.wechat.service.IUserService;
+import com.bilibala.wechat.service.IWechatUserService;
 
 /**
  * 关注用户 接口服务
@@ -12,7 +12,7 @@ import com.bilibala.wechat.service.IUserService;
  * @author smile
  * @createDate 2016年6月28日
  */
-public class UserServiceImpl implements IUserService {
+public class WechatUserServiceImpl implements IWechatUserService {
 	
 	private WechatUserDao wechatUserDao;
 
